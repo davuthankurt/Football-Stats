@@ -24,6 +24,7 @@ extension LeagueViewModel {
     func load() {
         notify(.updateTitle("Leagues"))
 //        39 pl, 203 superlig, 135 serie a, 61 ligue 1, 78 bundesliga, 140 la liga
+//        ,140,135,78,61,203
         let leagueIds = [39,140,135,78,61,203]
         
         for league in leagueIds {
@@ -46,7 +47,14 @@ extension LeagueViewModel {
     }
     
     func selectLeague(at index: Int) {
-//         TODO
+        if let selectedLeague = leagues[index].results.first {
+            
+            let viewModel = StandingsViewModel(league: selectedLeague, leagueName: selectedLeague.name)
+            dump(viewModel.standings) 
+            delegate?.navigate(to: .standings(viewModel))
+        } else {
+            print("no league available")
+        }
     }
     
     private func notify(_ output: LeaguesViewModelOutput){

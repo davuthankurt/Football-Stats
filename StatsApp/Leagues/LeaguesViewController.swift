@@ -10,7 +10,7 @@ import Kingfisher
 
 class LeaguesViewController: UIViewController {
     
-    private var collectionView: UICollectionView!
+    private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var leagueList: [LeaguePresentation] = []
     
     var viewModel: LeaguesViewModelProtocol! {
@@ -27,7 +27,6 @@ class LeaguesViewController: UIViewController {
 }
 
 
-
 extension LeaguesViewController {
     func configureContents (){
         configureCollectionView()
@@ -40,13 +39,11 @@ extension LeaguesViewController {
         view.backgroundColor = .white
     }
     func configureCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 16
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -56,9 +53,7 @@ extension LeaguesViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
 }
-
 
 extension LeaguesViewController: LeaguesViewModelDelegate {
     func handleViewModelOutput(_ output: LeaguesViewModelOutput) {
@@ -68,6 +63,14 @@ extension LeaguesViewController: LeaguesViewModelDelegate {
         case .showLeagues(let leagueList):
             self.leagueList = leagueList
             collectionView.reloadData()
+        }
+    }
+    
+    func navigate(to route: LeaguesViewRoute) {
+        switch route {
+        case .standings(let viewModel):
+            let viewController = StandingsBuilder.make(with: viewModel)
+            show(viewController, sender: nil)
         }
     }
 }
@@ -81,10 +84,15 @@ extension LeaguesViewController: UICollectionViewDelegateFlowLayout {
         
         return CGSize(width: cellWidth, height: cellWidth * 1.5)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 16
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
 }
-
-
-
 
 
 extension LeaguesViewController: UICollectionViewDataSource {
@@ -105,6 +113,8 @@ extension LeaguesViewController: UICollectionViewDataSource {
 
 extension LeaguesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        TODO
+        collectionView.deselectItem(at: indexPath, animated: true)
+        viewModel.selectLeague(at: indexPath.item)
     }
 }
+

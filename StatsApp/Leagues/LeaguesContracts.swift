@@ -19,6 +19,11 @@ enum LeaguesViewModelOutput {
     case showLeagues([LeaguePresentation])
 }
 
+enum LeaguesViewRoute{
+    case standings(StandingsViewModelProtocol)
+}
+
 protocol LeaguesViewModelDelegate: AnyObject {
     func handleViewModelOutput(_ output: LeaguesViewModelOutput)
+    func navigate(to route: LeaguesViewRoute)
 }

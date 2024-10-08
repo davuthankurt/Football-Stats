@@ -7,6 +7,7 @@
 
 import UIKit
 
+//Temporary Cell Code
 class LeagueCell: UICollectionViewCell {
     var imageView: UIImageView!
     var leagueTitle: UILabel!
