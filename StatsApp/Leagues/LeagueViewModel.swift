@@ -25,7 +25,7 @@ extension LeagueViewModel {
         notify(.updateTitle("Leagues"))
 //        39 pl, 203 superlig, 135 serie a, 61 ligue 1, 78 bundesliga, 140 la liga
 //        ,140,135,78,61,203
-        let leagueIds = [39,140,135,78,61,203]
+        let leagueIds = [39]
         
         for league in leagueIds {
             service.fetchData(from: .standings(league: league), responseType: LeagueResponse.self) { [weak self] result in
@@ -34,7 +34,7 @@ extension LeagueViewModel {
                 switch result {
                 case .success(let standingsResponse):
                     leagues.append(standingsResponse)
-                    if leagues.count == 6 {
+                    if leagues.count == 1 {
                         let presentations = leagues.flatMap { $0.results.map { LeaguePresentation(league: $0) } }
                         notify(.showLeagues(presentations))
                     }
@@ -50,7 +50,7 @@ extension LeagueViewModel {
         if let selectedLeague = leagues[index].results.first {
             
             let viewModel = StandingsViewModel(league: selectedLeague, leagueName: selectedLeague.name)
-            dump(viewModel.standings) 
+//            dump(viewModel.standings) 
             delegate?.navigate(to: .standings(viewModel))
         } else {
             print("no league available")

@@ -10,7 +10,7 @@ import Kingfisher
 
 class LeaguesViewController: UIViewController {
     
-    private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var leagueList: [LeaguePresentation] = []
     
     var viewModel: LeaguesViewModelProtocol! {

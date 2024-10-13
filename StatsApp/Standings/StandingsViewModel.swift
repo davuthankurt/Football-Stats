@@ -28,7 +28,7 @@ extension StandingsViewModel {
     }
     
     func selectTeam(at index: Int) {
-//        TODO
+        let viewModel = ClubsViewModel()
     }
     
     private func notify(_ output: StandingsViewModelOutput){
