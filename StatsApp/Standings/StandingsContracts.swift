@@ -9,7 +9,9 @@ import Foundation
 
 protocol StandingsViewModelProtocol {
     var delegate: StandingsViewModelDelegate? { get set }
-    func selectTeam(at index: Int)
+    func didSelectRowAt(index: IndexPath)
+    func numberOfRowsInSection(section: Int) -> Int
+    func cellForRowAt(index: IndexPath) -> StandingsCellPresentation
     func loadStandings()
 }
 
@@ -19,7 +21,7 @@ enum StandingsViewModelOutput {
 }
 
 enum StandingsViewRoute {
-    case clubPage(ClubsViewModelProtocol)
+    case clubPage(Int)
 }
 
 protocol StandingsViewModelDelegate: AnyObject {

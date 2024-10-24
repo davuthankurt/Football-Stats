@@ -9,7 +9,7 @@ import UIKit
 
 class StandingsViewController: UIViewController {
     
-    private var tableView: UITableView?
+    private var tableView = UITableView()
     public var leagueTable: StandingsPresentation?
     
     var viewModel: StandingsViewModelProtocol? {
@@ -20,26 +20,51 @@ class StandingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        let tableView = UITableView()
-        tableView.register(StandingsCell.self, forCellReuseIdentifier: "Cell")
-        tableView.dataSource = self
-        tableView.delegate = self
+        addSubviews()
+        configureContents()
+        viewModel?.loadStandings()
+    }
+}
+
+extension StandingsViewController {
+    
+    func addSubviews(){
+        addTableView()
+    }
+    
+    func addTableView(){
         
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        self.tableView = tableView
         view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        viewModel?.loadStandings()
     }
 }
+
+
+extension StandingsViewController {
+    
+    func configureContents(){
+        confingureView()
+        configureTableView()
+    }
+    
+    func confingureView(){
+        view.backgroundColor = .white
+    }
+    
+    func configureTableView(){
+        tableView.register(StandingsCell.self, forCellReuseIdentifier: "Cell")
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+}
+
+
 
 extension StandingsViewController: StandingsViewModelDelegate {
     func handleViewModelOutput(_ output: StandingsViewModelOutput) {
@@ -48,29 +73,32 @@ extension StandingsViewController: StandingsViewModelDelegate {
             self.title = title
         case .showTeams(let standingsTable):
             self.leagueTable = standingsTable
-            tableView?.reloadData()
+            tableView.reloadData()
+        }
+    }
+    
+    func navigate(to route: StandingsViewRoute) {
+        switch route {
+        case .clubPage(let id):
+            let viewController = ClubBuilder.make(id: id)
+            show(viewController, sender: nil)
         }
     }
 }
 
 extension StandingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let table = leagueTable?.standings.first else { return 0 }
-        return table.count
+        guard let teamCount = viewModel?.numberOfRowsInSection(section: section) else { return 0 }
+        return teamCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? StandingsCell else { return UITableViewCell() }
-        guard let table = leagueTable?.standings.first else { return cell }
-        let team = table[indexPath.row]
         
-        cell.rank.text = "\(team.rank)."
-        cell.team.text = team.team.name
-//        cell.form.text = team.form
-        cell.goalsDiff.text = "\(team.goalsDiff)"
-        cell.points.text = "\(team.points)"
-//        cell.records.text = "\(team.records.win)"
-    
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? StandingsCell else { return UITableViewCell() }
+        
+        if let team = viewModel?.cellForRowAt(index: indexPath) {
+            cell.configureCells(with: team)
+        }
         return cell
     }
     
@@ -89,6 +117,7 @@ extension StandingsViewController: UITableViewDataSource {
 
 extension StandingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        TODO
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel?.didSelectRowAt(index: indexPath)
     }
 }

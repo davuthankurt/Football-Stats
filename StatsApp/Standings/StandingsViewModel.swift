@@ -13,6 +13,7 @@ final class StandingsViewModel: StandingsViewModelProtocol {
     weak var delegate: StandingsViewModelDelegate?
     public var standings: StandingsPresentation
     public var leagueName: String
+    var standingCells: [StandingsCellPresentation] = []
     
     init(league: League, leagueName: String) {
         self.standings = StandingsPresentation(league: league)
@@ -23,12 +24,24 @@ final class StandingsViewModel: StandingsViewModelProtocol {
 extension StandingsViewModel {
     
     func loadStandings() {
+        guard let temp = standings.standings.first else { return }
+        standingCells.append(contentsOf: temp.map { StandingsCellPresentation(team: $0) })
         notify(.updateTitle(leagueName))
         notify(.showTeams(standings))
     }
     
-    func selectTeam(at index: Int) {
-        let viewModel = ClubsViewModel()
+    func numberOfRowsInSection(section: Int) -> Int {
+        guard let teams = standings.standings.first else { return 0 }
+        return teams.count
+    }
+    
+    func cellForRowAt(index: IndexPath) -> StandingsCellPresentation {
+        return standingCells[index.row]
+    }
+    
+    func didSelectRowAt(index: IndexPath) {
+        guard let team = standings.standings.first?[index.row].team.id else { return }
+        delegate?.navigate(to: .clubPage(team))
     }
     
     private func notify(_ output: StandingsViewModelOutput){
