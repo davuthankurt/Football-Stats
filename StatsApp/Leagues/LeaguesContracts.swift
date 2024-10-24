@@ -11,7 +11,9 @@ import Foundation
 protocol LeaguesViewModelProtocol {
     var delegate: LeaguesViewModelDelegate? { get set }
     func load()
-    func selectLeague(at index: Int)
+    func didSelectRowAt(index: IndexPath)
+    func numberOfItemsInSection(section: Int) -> Int
+    func cellForItemAt(index: IndexPath) -> LeaguePresentation
 }
 
 enum LeaguesViewModelOutput {

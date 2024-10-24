@@ -12,6 +12,7 @@ final class LeagueViewModel: LeaguesViewModelProtocol {
     weak var delegate: LeaguesViewModelDelegate?
     private let service: AppService
     public var leagues = [LeagueResponse]()
+    var leagueCell = [LeaguePresentation]()
     
     init(service: AppService) {
         self.service = service
@@ -23,7 +24,7 @@ extension LeagueViewModel {
     
     func load() {
         notify(.updateTitle("Leagues"))
-//        39 pl, 203 superlig, 135 serie a, 61 ligue 1, 78 bundesliga, 140 la liga
+//        39 pl, 203 superlig, 135 serie a, 61 ligue 1, 78 bundesliga, 140 la liga, 2 cl
 //        ,140,135,78,61,203
         let leagueIds = [39]
         
@@ -36,6 +37,7 @@ extension LeagueViewModel {
                     leagues.append(standingsResponse)
                     if leagues.count == 1 {
                         let presentations = leagues.flatMap { $0.results.map { LeaguePresentation(league: $0) } }
+                        leagueCell = presentations
                         notify(.showLeagues(presentations))
                     }
                     
@@ -46,8 +48,8 @@ extension LeagueViewModel {
         }
     }
     
-    func selectLeague(at index: Int) {
-        if let selectedLeague = leagues[index].results.first {
+    func didSelectRowAt(index: IndexPath) {
+        if let selectedLeague = leagues[index.item].results.first {
             
             let viewModel = StandingsViewModel(league: selectedLeague, leagueName: selectedLeague.name)
 //            dump(viewModel.standings) 
@@ -55,6 +57,14 @@ extension LeagueViewModel {
         } else {
             print("no league available")
         }
+    }
+    
+    func numberOfItemsInSection(section: Int) -> Int {
+        return leagues.count
+    }
+    
+    func cellForItemAt(index: IndexPath) -> LeaguePresentation {
+        return leagueCell[index.item]
     }
     
     private func notify(_ output: LeaguesViewModelOutput){

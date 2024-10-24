@@ -6,29 +6,29 @@
 //
 
 import UIKit
-import Kingfisher
 
 class LeaguesViewController: UIViewController {
     
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var leagueList: [LeaguePresentation] = []
     
-    var viewModel: LeaguesViewModelProtocol! {
+    var viewModel: LeaguesViewModelProtocol? {
         didSet{
-            viewModel.delegate = self
+            viewModel?.delegate = self
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureContents()
-        viewModel.load()
+        viewModel?.load()
     }
 }
 
 
 extension LeaguesViewController {
     func configureContents (){
+        configureView()
         configureCollectionView()
         configureCell()
     }
@@ -98,15 +98,19 @@ extension LeaguesViewController: UICollectionViewDelegateFlowLayout {
 extension LeaguesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! LeagueCell
-        let url = URL(string: leagueList[indexPath.item].image)
+        
         cell.backgroundColor = .cyan
-        cell.imageView.kf.setImage(with: url)
-        cell.leagueTitle.text = leagueList[indexPath.item].title
+        
+        if let league = viewModel?.cellForItemAt(index: indexPath) {
+            cell.configureCell(with: league)
+        }
+
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return leagueList.count
+        guard let viewModel = viewModel else { return 0 }
+        return viewModel.numberOfItemsInSection(section: section)
     }
     
 }
@@ -114,7 +118,7 @@ extension LeaguesViewController: UICollectionViewDataSource {
 extension LeaguesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        viewModel.selectLeague(at: indexPath.item)
+        viewModel?.didSelectRowAt(index: indexPath)
     }
 }
 
