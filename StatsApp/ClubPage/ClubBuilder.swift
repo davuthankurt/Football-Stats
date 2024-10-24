@@ -9,9 +9,9 @@ import Foundation
 
 final class ClubBuilder {
     
-    static func make(with viewModel: ClubsViewModelProtocol) -> ClubsViewController {
+    static func make(id: Int) -> ClubsViewController {
         let viewController = ClubsViewController()
-        viewController.viewModel = viewModel
+        viewController.viewModel = ClubsViewModel(service: app.service, teamId: id)
         return viewController
     }
 }

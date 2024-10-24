@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import StatsAPI
 
 protocol ClubsViewModelProtocol {
     var delegate: ClubsViewModelDelegate? { get set }
-    func selectPlayer(at index: Int)
+    func didSelectRowAt(index: IndexPath)
+    func cellForRowAt(index: IndexPath) -> ClubPlayerCellPresentation
+    func numberOfRowsInSection(section: Int) -> Int
     func loadClub()
 }
 

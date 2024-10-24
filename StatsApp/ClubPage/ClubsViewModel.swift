@@ -12,30 +12,44 @@ final class ClubsViewModel: ClubsViewModelProtocol {
     
     weak var delegate: ClubsViewModelDelegate?
     private let service: AppService
-    let teamId = 21
-    init(service: AppService) {
+    var playerCell: [ClubPlayerCellPresentation] = []
+    let teamId: Int
+    init(service: AppService, teamId: Int) {
         self.service = service
+        self.teamId = teamId
     }
 }
 
 extension ClubsViewModel {
 
     func loadClub() {
-        service.fetchData(from: .club(team: teamId), responseType: Clubs.self) { [weak self] result in
+        service.fetchData(from: .club(team: teamId), responseType: ClubsResponse.self) { [weak self] result in
             guard let self else { return }
             
             switch result {
             case .success(let clubResponse):
-                print(clubResponse)
-                print(clubResponse.team.name)
-                print(clubResponse.players.first?.name)
+                
+                guard let club = clubResponse.results.first else { return }
+                let presentation = ClubPresentation(club: club)
+                playerCell = presentation.players.map { ClubPlayerCellPresentation(cell: $0) }
+                notify(.updateTitle(presentation.team.name))
+                notify(.showClubPage(presentation))
+
             case .failure(let error):
-                print(error)
+                print(error.localizedDescription)
             }
         }
     }
     
-    func selectPlayer(at index: Int) {
+    func numberOfRowsInSection(section: Int) -> Int {
+        return playerCell.count
+    }
+
+    func cellForRowAt(index: IndexPath) -> ClubPlayerCellPresentation  {
+        return playerCell[index.row]
+    }
+        
+    func didSelectRowAt(index: IndexPath) {
         
     }
     
@@ -43,3 +57,4 @@ extension ClubsViewModel {
         delegate?.handleViewModelOutput(output)
     }
 }
+
