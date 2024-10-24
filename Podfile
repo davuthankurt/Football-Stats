@@ -10,6 +10,7 @@ workspace 'FootballStats'
 
 $Kingfisher =  pod 'Kingfisher'
 $Alamofire =  pod 'Alamofire', '~> 5.4'
+$SnapKit = pod 'SnapKit', '~> 5.7.0'
 
 target 'StatsApp' do
   
@@ -17,7 +18,8 @@ target 'StatsApp' do
 
   # Pods for StatsApp
   $Kingfisher
-
+  $SnapKit
+  
 end
 
 target 'StatsAPI' do
