@@ -8,10 +8,10 @@
 import UIKit
 //Temporary Standings Cell.
 class StandingsCell: UITableViewCell {
-    public var rank = UILabel()
+    var rank = UILabel()
 //    var form = UILabel()
     var points = UILabel()
-    var team = UILabel()
+    var teamName = UILabel()
 //    var records = UILabel()
     var goalsDiff = UILabel()
     
@@ -27,17 +27,16 @@ class StandingsCell: UITableViewCell {
 
     private func setupViews() {
         contentView.addSubview(rank)
-        contentView.addSubview(team)
+        contentView.addSubview(teamName)
         contentView.addSubview(points)
         contentView.addSubview(goalsDiff)
 //        contentView.addSubview(form)
 //        contentView.addSubview(records)
         
-        // Eğer ihtiyaç varsa label'ların stilini burada ayarlayabilirsin
         rank.text = "R"
         rank.textAlignment = .left
-        team.text = "Team"
-        team.textAlignment = .left
+        teamName.text = "Team"
+        teamName.textAlignment = .left
         points.text = "P"
         points.textAlignment = .center
         goalsDiff.text = "Av"
@@ -48,40 +47,40 @@ class StandingsCell: UITableViewCell {
 
     private func setupConstraints() {
         rank.translatesAutoresizingMaskIntoConstraints = false
-        team.translatesAutoresizingMaskIntoConstraints = false
+        teamName.translatesAutoresizingMaskIntoConstraints = false
         points.translatesAutoresizingMaskIntoConstraints = false
         goalsDiff.translatesAutoresizingMaskIntoConstraints = false
 //        form.translatesAutoresizingMaskIntoConstraints = false
 //        records.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            // Rank Label
+
             rank.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             rank.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             rank.widthAnchor.constraint(equalToConstant: 30),
-            
-            // Team Label
-            team.leadingAnchor.constraint(equalTo: rank.trailingAnchor, constant: 8),
-            team.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            team.widthAnchor.constraint(equalToConstant: 150),
-            
-            // Points Label
+            teamName.leadingAnchor.constraint(equalTo: rank.trailingAnchor, constant: 8),
+            teamName.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            teamName.widthAnchor.constraint(equalToConstant: 150),
             points.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             points.leadingAnchor.constraint(equalTo: goalsDiff.trailingAnchor, constant: 8),
             points.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             points.widthAnchor.constraint(equalToConstant: 30),
-            
-            // GoalsDiff Label
             goalsDiff.trailingAnchor.constraint(equalTo: points.leadingAnchor, constant: -8),
             goalsDiff.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             goalsDiff.widthAnchor.constraint(equalToConstant: 30),
-            
-            // Form Label
 //            form.leadingAnchor.constraint(equalTo: team.trailingAnchor, constant: 8),
 //            form.trailingAnchor.constraint(equalTo: goalsDiff.leadingAnchor, constant: -8),
 //            form.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
             // Records Label
         ])
+    }
+    
+    public func configureCells(with team: StandingsCellPresentation) {
+        rank.text = "\(team.rank)."
+        teamName.text = team.team
+//        form.text = team.form
+        goalsDiff.text = "\(team.goalsDiff)"
+        points.text = "\(team.points)"
+//        records.text = "\(team.records.win)"
     }
 }
