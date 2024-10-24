@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import StatsAPI
+
+extension StandingsCellPresentation {
+    convenience init(team: Standing) {
+        self.init(rank: team.rank, points: team.points, team: team.team.name, goalsDiff: team.goalsDiff)
+    }
+}
