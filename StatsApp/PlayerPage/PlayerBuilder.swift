@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+final class PlayerBuilder {
+    static func make(playerId: Int) -> PlayerViewController {
+        let viewController = PlayerViewController()
+        viewController.viewModel = PlayerViewModel(service: app.service, playerId: playerId)
+        return viewController
+    }
+}

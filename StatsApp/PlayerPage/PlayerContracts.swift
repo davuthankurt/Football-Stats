@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+protocol PlayerViewModelProtocol {
+    var delegete: PlayerViewModelDelegate? { get set }
+    func loadPlayer()
+}
+
+enum PlayerViewModelOutput {
+    case showPlayerPage
+}
+
+protocol PlayerViewModelDelegate: AnyObject {
+    func handleViewModelOutput(_ output: PlayerViewModelOutput)
+}
