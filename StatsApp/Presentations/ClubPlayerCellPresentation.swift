@@ -9,13 +9,13 @@ import Foundation
 
 final class ClubPlayerCellPresentation: NSObject {
     let id: Int
-    let name: String
-    let age: Int
-    let number: Int
-    let position: String
-    let photo: String
+    let name: String?
+    let age: Int?
+    let number: Int?
+    let position: String?
+    let photo: String?
     
-    init(id: Int, name: String, age: Int, number: Int, position: String, photo: String) {
+    init(id: Int, name: String?, age: Int?, number: Int?, position: String?, photo: String?) {
         self.id = id
         self.name = name
         self.age = age
