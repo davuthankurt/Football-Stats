@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import StatsAPI
+
+extension PlayerPresentation {
+    convenience init(footballer: PlayerInfo) {
+        self.init(player: footballer.player, statistics: footballer.statistics)
+    }
+}
