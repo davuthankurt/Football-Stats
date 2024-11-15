@@ -19,8 +19,6 @@ class ClubsViewController: UIViewController {
         }
     }
     
-    var club: ClubPresentation?
-    
     var teamImage = UIImageView()
     var teamName = UILabel()
     
@@ -85,8 +83,8 @@ extension ClubsViewController {
         
         teamImage.translatesAutoresizingMaskIntoConstraints = false
         
-        guard let selectedTeam = club?.team else { return }
-        let url = URL(string: selectedTeam.logo)
+        guard let viewModel = viewModel else { return }
+        let url = URL(string: viewModel.setClubImage())
         teamImage.kf.setImage(with: url)
         teamImage.contentMode = .scaleAspectFit
         clubBox.addSubview(teamImage)
@@ -94,7 +92,7 @@ extension ClubsViewController {
         teamName.translatesAutoresizingMaskIntoConstraints = false
         teamName.font = .systemFont(ofSize: 24)
         teamName.textColor = UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1)
-        teamName.text = selectedTeam.name
+        teamName.text = viewModel.setClubName()
         clubBox.addSubview(teamName)
         
         NSLayoutConstraint.activate([
@@ -119,12 +117,19 @@ extension ClubsViewController {
 extension ClubsViewController: ClubsViewModelDelegate {
     func handleViewModelOutput(_ output: ClubsViewModelOutput) {
         switch output {
-        case .showClubPage(let clubPresentation):
-            self.club = clubPresentation
+        case .showClubPage:
             configureTableView()
             tableView?.reloadData()
         case .updateTitle(let title):
             self.title = title
+        }
+    }
+    
+    func navigate(to route: ClubsViewRoute) {
+        switch route {
+        case .playerPage(let id):
+            let viewController = PlayerBuilder.make(playerId: id)
+            show(viewController, sender: nil)
         }
     }
 }
@@ -165,6 +170,7 @@ extension ClubsViewController: UITableViewDataSource {
 
 extension ClubsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel?.didSelectRowAt(index: indexPath)
     }
 }
