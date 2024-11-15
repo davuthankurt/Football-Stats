@@ -15,10 +15,10 @@ public struct Clubs: Codable {
 
 public struct Players: Codable {
     public let id: Int
-    public let name: String
-    public let age: Int
-    public let number: Int
-    public let position: String
-    public let photo: String
+    public let name: String?
+    public let age: Int?
+    public let number: Int?
+    public let position: String?
+    public let photo: String?
 }
 
