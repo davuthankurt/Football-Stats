@@ -76,9 +76,19 @@ class ClubPlayersCell: UITableViewCell {
     }
     
     public func configureCell(with player: ClubPlayerCellPresentation) {
-        age.text = "\(player.age)"
+        if let playerAge = player.age{
+            age.text = "\(playerAge)"
+        } else {
+            age.text = "_"
+        }
         name.text = player.name
-        number.text = "\(player.number)"
+        
+        if let playerNumber = player.number{
+            number.text = "\(playerNumber)"
+        } else {
+            number.text = "_"
+        }
+        
         
         switch player.position {
         case "Goalkeeper":
@@ -93,7 +103,8 @@ class ClubPlayersCell: UITableViewCell {
             position.text = "UNK"
         }
         
-        let url = URL(string: player.photo)
+        guard let photoString = player.photo else { return }
+        let url = URL(string: photoString)
         photo.kf.setImage(with: url)
     }
 }

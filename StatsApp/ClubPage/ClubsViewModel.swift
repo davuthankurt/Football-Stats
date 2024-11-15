@@ -13,6 +13,7 @@ final class ClubsViewModel: ClubsViewModelProtocol {
     weak var delegate: ClubsViewModelDelegate?
     private let service: AppService
     var playerCell: [ClubPlayerCellPresentation] = []
+    var presentation: ClubPresentation?
     let teamId: Int
     init(service: AppService, teamId: Int) {
         self.service = service
@@ -30,10 +31,11 @@ extension ClubsViewModel {
             case .success(let clubResponse):
                 
                 guard let club = clubResponse.results.first else { return }
-                let presentation = ClubPresentation(club: club)
-                playerCell = presentation.players.map { ClubPlayerCellPresentation(cell: $0) }
-                notify(.updateTitle(presentation.team.name))
-                notify(.showClubPage(presentation))
+                presentation = ClubPresentation(club: club)
+                guard let presentationClub = presentation else { return }
+                playerCell = presentationClub.players.map { ClubPlayerCellPresentation(cell: $0) }
+                notify(.updateTitle(presentationClub.team.name))
+                notify(.showClubPage)
 
             case .failure(let error):
                 print(error.localizedDescription)
@@ -50,7 +52,19 @@ extension ClubsViewModel {
     }
         
     func didSelectRowAt(index: IndexPath) {
+        let player = playerCell[index.row].id
         
+        delegate?.navigate(to: .playerPage(player))
+    }
+    
+    func setClubImage() -> String {
+        guard let presentationClub = presentation else { return ""}
+        return presentationClub.team.logo
+    }
+    
+    func setClubName() -> String {
+        guard let presentationClub = presentation else { return ""}
+        return presentationClub.team.name
     }
     
     private func notify(_ output: ClubsViewModelOutput) {
