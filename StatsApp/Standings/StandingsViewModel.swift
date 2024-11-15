@@ -27,7 +27,7 @@ extension StandingsViewModel {
         guard let temp = standings.standings.first else { return }
         standingCells.append(contentsOf: temp.map { StandingsCellPresentation(team: $0) })
         notify(.updateTitle(leagueName))
-        notify(.showTeams(standings))
+        notify(.showTeams)
     }
     
     func numberOfRowsInSection(section: Int) -> Int {

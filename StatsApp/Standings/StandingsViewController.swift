@@ -10,7 +10,6 @@ import UIKit
 class StandingsViewController: UIViewController {
     
     private var tableView = UITableView()
-    public var leagueTable: StandingsPresentation?
     
     var viewModel: StandingsViewModelProtocol? {
         didSet{
@@ -71,8 +70,7 @@ extension StandingsViewController: StandingsViewModelDelegate {
         switch output {
         case .updateTitle(let title):
             self.title = title
-        case .showTeams(let standingsTable):
-            self.leagueTable = standingsTable
+        case .showTeams:
             tableView.reloadData()
         }
     }

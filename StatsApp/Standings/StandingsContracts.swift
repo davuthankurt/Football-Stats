@@ -17,7 +17,7 @@ protocol StandingsViewModelProtocol {
 
 enum StandingsViewModelOutput {
     case updateTitle(String)
-    case showTeams(StandingsPresentation)
+    case showTeams
 }
 
 enum StandingsViewRoute {

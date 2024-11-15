@@ -18,7 +18,7 @@ protocol LeaguesViewModelProtocol {
 
 enum LeaguesViewModelOutput {
     case updateTitle(String)
-    case showLeagues([LeaguePresentation])
+    case showLeagues
 }
 
 enum LeaguesViewRoute{

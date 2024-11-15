@@ -10,7 +10,6 @@ import UIKit
 class LeaguesViewController: UIViewController {
     
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private var leagueList: [LeaguePresentation] = []
     
     var viewModel: LeaguesViewModelProtocol? {
         didSet{
@@ -60,8 +59,7 @@ extension LeaguesViewController: LeaguesViewModelDelegate {
         switch output {
         case .updateTitle(let title):
             self.title = title
-        case .showLeagues(let leagueList):
-            self.leagueList = leagueList
+        case .showLeagues:
             collectionView.reloadData()
         }
     }

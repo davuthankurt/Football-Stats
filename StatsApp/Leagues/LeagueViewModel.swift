@@ -38,7 +38,7 @@ extension LeagueViewModel {
                     if leagues.count == 1 {
                         let presentations = leagues.flatMap { $0.results.map { LeaguePresentation(league: $0) } }
                         leagueCell = presentations
-                        notify(.showLeagues(presentations))
+                        notify(.showLeagues)
                     }
                     
                 case .failure(let error):
