@@ -14,13 +14,19 @@ protocol ClubsViewModelProtocol {
     func cellForRowAt(index: IndexPath) -> ClubPlayerCellPresentation
     func numberOfRowsInSection(section: Int) -> Int
     func loadClub()
+    func setClubImage() -> String
+    func setClubName() -> String
 }
 
 enum ClubsViewModelOutput {
     case updateTitle(String)
-    case showClubPage(ClubPresentation)
+    case showClubPage
 }
 
+enum ClubsViewRoute {
+    case playerPage(Int)
+}
 protocol ClubsViewModelDelegate: AnyObject {
     func handleViewModelOutput(_ output: ClubsViewModelOutput)
+    func navigate(to route: ClubsViewRoute)
 }
