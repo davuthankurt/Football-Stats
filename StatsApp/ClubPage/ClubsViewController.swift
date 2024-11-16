@@ -10,7 +10,7 @@ import Kingfisher
 
 class ClubsViewController: UIViewController {
     
-    private var tableView: UITableView?
+    private var tableView = UITableView()
     let clubBox = UIView()
     
     var viewModel: ClubsViewModelProtocol? {
@@ -26,6 +26,7 @@ class ClubsViewController: UIViewController {
         super.viewDidLoad()
         viewModel?.loadClub()
         configureContents()
+        setConstraints()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,7 +59,10 @@ extension ClubsViewController {
     
     func configureContents(){
         configureView()
-        
+        configureClubBox()
+        configureTeamImage()
+        configureTeamName()
+        configureTableView()
     }
     
     func configureView(){
@@ -67,41 +71,47 @@ extension ClubsViewController {
     
     func configureTableView() {
         
-        let tableView = UITableView()
+        view.addSubview(tableView)
         tableView.register(ClubPlayersCell.self, forCellReuseIdentifier: "Cell")
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.sectionHeaderTopPadding = 0.0
-        
-        self.tableView = tableView
-        view.addSubview(tableView)
-        
-        
-        clubBox.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func configureClubBox() {
         view.addSubview(clubBox)
-        
-        teamImage.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+    
+    private func configureTeamImage(){
         guard let viewModel = viewModel else { return }
         let url = URL(string: viewModel.setClubImage())
         teamImage.kf.setImage(with: url)
         teamImage.contentMode = .scaleAspectFit
         clubBox.addSubview(teamImage)
-        
-        teamName.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func configureTeamName() {
+        guard let viewModel = viewModel else { return }
         teamName.font = .systemFont(ofSize: 24)
         teamName.textColor = UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1)
         teamName.text = viewModel.setClubName()
         clubBox.addSubview(teamName)
+    }
+    
+    private func setConstraints() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        clubBox.translatesAutoresizingMaskIntoConstraints = false
+        teamImage.translatesAutoresizingMaskIntoConstraints = false
+        teamName.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            clubBox.topAnchor.constraint(equalTo: navigationController!.navigationBar.bottomAnchor),
+            clubBox.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             clubBox.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             clubBox.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             clubBox.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2),
             tableView.topAnchor.constraint(equalTo: clubBox.bottomAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             teamImage.centerYAnchor.constraint(equalTo: clubBox.centerYAnchor),
@@ -118,8 +128,9 @@ extension ClubsViewController: ClubsViewModelDelegate {
     func handleViewModelOutput(_ output: ClubsViewModelOutput) {
         switch output {
         case .showClubPage:
-            configureTableView()
-            tableView?.reloadData()
+            configureContents()
+            setConstraints()
+            tableView.reloadData()
         case .updateTitle(let title):
             self.title = title
         }
