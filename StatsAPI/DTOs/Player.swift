@@ -67,12 +67,12 @@ public struct PlayerInfo: Codable {
 
 public struct Player: Codable {
     public let id: Int
-    public let name: String
-    public let age: Int
-    public let nationality: String
+    public let name: String?
+    public let age: Int?
+    public let nationality: String?
     public let height: String?
     public let weight: String?
-    public let photo: String
+    public let photo: String?
 }
 
 public struct Statistics: Codable {
@@ -83,11 +83,11 @@ public struct Statistics: Codable {
     public let cards: Cards
     
     public struct League: Codable {
-        public let country: String
-        public let flag: String
+        public let country: String?
+        public let flag: String?
         public let id: Int
-        public let logo: String
-        public let name: String
+        public let logo: String?
+        public let name: String?
     }
 }
 
@@ -97,13 +97,13 @@ public struct Games: Codable {
 }
 
 public struct Goals: Codable {
-    public let total: Int
-    public let assists: Int
+    public let total: Int?
+    public let assists: Int?
 }
 
 public struct Cards: Codable {
-    public let yellow: Int
-    public let red: Int
+    public let yellow: Int?
+    public let red: Int?
 }
 
 
