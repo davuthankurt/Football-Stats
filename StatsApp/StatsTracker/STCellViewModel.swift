@@ -8,28 +8,37 @@
 import Foundation
 
 
-final class StatsTrackerCellViewModel: StatsTrackerCellViewModelProtocol {
+final class StatsTrackerCellViewModel: STCellViewModelProtocol {
     
-    
+    var delegate: STCellViewModelDelegate?
     var numberOfRowsInSection: Int
     
-    var goalScorers: [PlayerPresentation]
-    var asistMakers: [PlayerPresentation]
+    var topStats: [PlayerPresentation]
+    var goalOrAssist: Bool
     
-    init(goalScorers: [PlayerPresentation], asistMakers: [PlayerPresentation]) {
-        self.goalScorers = goalScorers
-        self.asistMakers = asistMakers
+    init(topStats: [PlayerPresentation], goalOrAssist: Bool) {
+        self.topStats = topStats
+        self.goalOrAssist = goalOrAssist
+        self.numberOfRowsInSection = topStats.count
     }
-    
 }
 
 extension StatsTrackerCellViewModel {
     
-    func cellForRowAt() {
-        <#code#>
+    func getPlayers() {
+        notify(.showPlayers)
+    }
+    
+    func cellForRowAt(index: IndexPath) -> PlayerPresentation {
+        return topStats[index.row]
     }
     
     func didSelectItemAt() {
-        <#code#>
+        
+    }
+    
+    func notify(_ output: STCellViewModelOutput) {
+        delegate?.handleViewModelOutput(output)
     }
 }
+
