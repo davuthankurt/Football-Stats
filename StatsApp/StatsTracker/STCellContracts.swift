@@ -7,17 +7,18 @@
 
 import Foundation
 
-protocol StatsTrackerCellViewModelProtocol {
-    
+protocol STCellViewModelProtocol {
+    var delegate: STCellViewModelDelegate? { get set }
     var numberOfRowsInSection: Int { get set }
-    func cellForRowAt()
+    func getPlayers()
+    func cellForRowAt(index: IndexPath) -> PlayerPresentation
     func didSelectItemAt()
 }
 
-enum statsTrackerViewModelOutput{
+enum STCellViewModelOutput{
     case showPlayers
 }
 
-protocol StatsTrackerCellViewModelDelegate {
-    func handleViewModelOutput(_ output: statsTrackerViewModelOutput)
+protocol STCellViewModelDelegate {
+    func handleViewModelOutput(_ output: STCellViewModelOutput)
 }
