@@ -34,7 +34,7 @@ extension ClubsViewModel {
                 presentation = ClubPresentation(club: club)
                 guard let presentationClub = presentation else { return }
                 playerCell = presentationClub.players.map { ClubPlayerCellPresentation(cell: $0) }
-                notify(.updateTitle(presentationClub.team.name))
+                notify(.updateTitle("DAKY Stats"))
                 notify(.showClubPage)
 
             case .failure(let error):
