@@ -24,6 +24,7 @@ protocol StatsTrackerViewModelProtocol {
 enum StatsTrackerViewModelOutput {
     case showTopScorers
     case showTopAssisters
+    case updateTitle(String)
 }
 
 protocol StatsTrackerViewModelDelegate {
