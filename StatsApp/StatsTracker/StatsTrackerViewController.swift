@@ -59,7 +59,7 @@ extension StatsTrackerViewController {
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
     
@@ -67,8 +67,7 @@ extension StatsTrackerViewController {
         return UICollectionViewCompositionalLayout { sectionNumber, env in
             
             let item = NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-            item.contentInsets.trailing = 1
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(400)), subitems: [item])
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(264)), subitems: [item])
             let section = NSCollectionLayoutSection(group: group)
             section.boundarySupplementaryItems = [
                 .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
@@ -88,6 +87,8 @@ extension StatsTrackerViewController: StatsTrackerViewModelDelegate {
             switch output {
             case .showTopScorers, .showTopAssisters:
                 self.collectionView.reloadData()
+            case .updateTitle(let title):
+                self.title = title
             }
         }
     }
@@ -121,7 +122,7 @@ extension StatsTrackerViewController: UICollectionViewDataSource, UICollectionVi
             fatalError("Unexpected element kind")
         }
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: LeagueHeader.reuseIdentifier, for: indexPath) as! LeagueHeader
-        headerView.backgroundColor = UIColor(red: 98/255, green: 149/255, blue: 132/255, alpha: 1)
+        headerView.backgroundColor = UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1)
         
         if let teamName = viewModel?.viewForSupplementaryElementOfKind(index: indexPath) {
             headerView.configure(with: teamName)
