@@ -13,17 +13,17 @@ final class LeagueViewModel: LeaguesViewModelProtocol {
     private let service: AppService
     public var leagues = [LeagueResponse]()
     var leagueCell = [LeaguePresentation]()
+    var leagueResults: [Int: LeagueResponse] = [:]
     
     init(service: AppService) {
         self.service = service
     }
-    
 }
 
 extension LeagueViewModel {
     
     func load() {
-        notify(.updateTitle("Leagues"))
+        notify(.updateTitle("DAKY Stats"))
 //        39 pl, 203 superlig, 135 serie a, 61 ligue 1, 78 bundesliga, 140 la liga, 2 cl
 //        ,140,135,78,61,203
         let leagueIds = [39]
@@ -34,8 +34,12 @@ extension LeagueViewModel {
                 
                 switch result {
                 case .success(let standingsResponse):
-                    leagues.append(standingsResponse)
-                    if leagues.count == 1 {
+                    leagueResults[league] = standingsResponse
+                    
+                    if leagueResults.keys.count == 1 {
+                        let sortedLeagues = leagueIds.compactMap { self.leagueResults[$0] }
+                        leagues = sortedLeagues
+                        
                         let presentations = leagues.flatMap { $0.results.map { LeaguePresentation(league: $0) } }
                         leagueCell = presentations
                         notify(.showLeagues)
@@ -47,12 +51,20 @@ extension LeagueViewModel {
             }
         }
     }
+    func reorderArray(array: [Int], order: [Int]) -> [Int] {
+        return array.sorted { first, second in
+            guard let firstIndex = order.firstIndex(of: first),
+                  let secondIndex = order.firstIndex(of: second) else {
+                return false
+            }
+            return firstIndex < secondIndex
+        }
+    }
     
     func didSelectRowAt(index: IndexPath) {
         if let selectedLeague = leagues[index.item].results.first {
-            
             let viewModel = StandingsViewModel(league: selectedLeague, leagueName: selectedLeague.name)
-//            dump(viewModel.standings) 
+//            dump(viewModel.standings)
             delegate?.navigate(to: .standings(viewModel))
         } else {
             print("no league available")

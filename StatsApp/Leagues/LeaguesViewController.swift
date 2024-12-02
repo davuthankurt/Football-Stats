@@ -20,6 +20,7 @@ class LeaguesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureContents()
+        setConstraints()
         viewModel?.load()
     }
 }
@@ -38,13 +39,16 @@ extension LeaguesViewController {
         view.backgroundColor = .white
     }
     func configureCollectionView() {
-
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(collectionView)
         
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = UIColor(red: 19/255, green: 29/255, blue: 36/255, alpha: 1)
+    }
+    
+    func setConstraints(){
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -79,7 +83,6 @@ extension LeaguesViewController: UICollectionViewDelegateFlowLayout {
         let padding: CGFloat = 32
         let cellWidth = (collectionView.frame.width - padding) / 2
 
-        
         return CGSize(width: cellWidth, height: cellWidth * 1.5)
     }
     
@@ -90,6 +93,10 @@ extension LeaguesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 16
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 16, left: 8, bottom: 16, right: 8)
+    }
 }
 
 
@@ -97,8 +104,10 @@ extension LeaguesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! LeagueCell
         
-        cell.backgroundColor = .cyan
-        
+        cell.backgroundColor = UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
+        cell.layer.cornerRadius = 10
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1).cgColor
         if let league = viewModel?.cellForItemAt(index: indexPath) {
             cell.configureCell(with: league)
         }
