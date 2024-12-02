@@ -30,7 +30,7 @@ class LeagueHeader: UICollectionReusableView {
     func configureTitle() {
         addSubview(titleLabel)
         titleLabel.font = UIFont(name: "AvenirNext-BoldItalic", size: 20)
-        titleLabel.textColor =  UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1)
+        titleLabel.textColor =  UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
     }
     
     func setTitleConstraints() {
