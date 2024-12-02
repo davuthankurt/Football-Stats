@@ -95,14 +95,36 @@ extension StatsTrackerCell: UITableViewDataSource {
     }
 }
 
-
 extension StatsTrackerCell: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        guard let viewModel = viewModel else { return }
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel.didSelectRowAt(index: indexPath)
     }
 }
 
 extension StatsTrackerCell: STCellViewModelDelegate {
+    func navigate(to route: STCellRoute) {
+        switch route {
+        case .playerPage(let id):
+            let viewController = PlayerBuilder.make(playerId: id)
+            if let parentViewController = findViewController() {
+                parentViewController.show(viewController, sender: nil)
+            }
+        }
+    }
+    
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let nextResponder = responder?.next {
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
+            }
+            responder = nextResponder
+        }
+        return nil
+    }
+    
     func handleViewModelOutput(_ output: STCellViewModelOutput) {
         switch output {
         case .showPlayers:
