@@ -17,7 +17,7 @@ class StandingsCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+        configureContents()
         setupConstraints()
     }
 
@@ -25,26 +25,49 @@ class StandingsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupViews() {
-        contentView.addSubview(rank)
-        contentView.addSubview(teamName)
-        contentView.addSubview(points)
-        contentView.addSubview(goalsDiff)
+    private func configureContents() {
+        configureRank()
+        configureName()
+        configurePoints()
+        configureGoalsDiff()
 //        contentView.addSubview(form)
 //        contentView.addSubview(records)
-        
-        rank.text = "R"
-        rank.textAlignment = .left
-        teamName.text = "Team"
-        teamName.textAlignment = .left
-        points.text = "P"
-        points.textAlignment = .center
-        goalsDiff.text = "Av"
-        goalsDiff.textAlignment = .center
 //        form.textAlignment = .center
 //        records.textAlignment = .center
     }
 
+    private func configureRank(){
+        contentView.addSubview(rank)
+        
+        rank.text = "R"
+        rank.textAlignment = .left
+        rank.textColor = UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
+    }
+    
+    private func configureName(){
+        contentView.addSubview(teamName)
+        
+        teamName.text = "Team"
+        teamName.textAlignment = .left
+        teamName.textColor = UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
+    }
+    
+    private func configurePoints(){
+        contentView.addSubview(points)
+        
+        points.text = "P"
+        points.textAlignment = .center
+        points.textColor = UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
+    }
+    
+    private func configureGoalsDiff(){
+        contentView.addSubview(goalsDiff)
+        
+        goalsDiff.text = "Av"
+        goalsDiff.textAlignment = .center
+        goalsDiff.textColor = UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
+    }
+    
     private func setupConstraints() {
         rank.translatesAutoresizingMaskIntoConstraints = false
         teamName.translatesAutoresizingMaskIntoConstraints = false
@@ -76,6 +99,10 @@ class StandingsCell: UITableViewCell {
     }
     
     public func configureCells(with team: StandingsCellPresentation) {
+        rank.textColor = .black
+        teamName.textColor = .black
+        goalsDiff.textColor = .black
+        points.textColor = .black
         rank.text = "\(team.rank)."
         teamName.text = team.team
 //        form.text = team.form
