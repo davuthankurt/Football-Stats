@@ -43,8 +43,8 @@ class StatsTrackerCell: UICollectionViewCell {
         
         cellTitle.textAlignment = .center
         cellTitle.font = UIFont(name: "AvenirNext-BoldItalic", size: 16)
-        cellTitle.textColor = UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1)
-        cellTitle.backgroundColor = UIColor(red: 98/255, green: 149/255, blue: 132/255, alpha: 1)
+        cellTitle.textColor =  UIColor(red: 36/255, green: 54/255, blue: 66/255, alpha: 1)
+        cellTitle.backgroundColor = UIColor(red: 226/255, green: 241/255, blue: 231/255, alpha: 1)
     }
     
     private func configureTableView(){
