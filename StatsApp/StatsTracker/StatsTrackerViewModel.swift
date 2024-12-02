@@ -30,7 +30,8 @@ final class StatsTrackerViewModel: StatsTrackerViewModelProtocol {
 extension StatsTrackerViewModel {
     
     func loadTopScorers() async {
-
+        notify(.updateTitle("DAKY Stats"))
+        
         await withTaskGroup(of: (Int, [PlayerPresentation]).self) { group in
             for (index, league) in leagueIds.enumerated() {
                 group.addTask {
