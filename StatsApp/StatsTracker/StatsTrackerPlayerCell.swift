@@ -68,9 +68,11 @@ class StatsTrackerPlayerCell: UITableViewCell {
         guard let playerStat = footballer.statistics.first else { return }
         playerName.text = footballer.player.name
         if stats == true {
-            playerScore.text = "\(playerStat.goals.total)"
+            guard let goals = playerStat.goals.total else { return }
+            playerScore.text = "\(goals)"
         } else {
-            playerScore.text = "\(playerStat.goals.assists)"
+            guard let assists = playerStat.goals.assists else { return }
+            playerScore.text = "\(assists)"
         }
         guard let footballerImage = footballer.player.photo else { return }
         let url = URL(string: footballerImage)
